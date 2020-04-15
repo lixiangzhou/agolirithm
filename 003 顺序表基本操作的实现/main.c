@@ -19,7 +19,7 @@ typedef struct{
 } SqList;
 
 Status InitList(SqList *L) {
-    L->elem = malloc(MAXSIZE);
+    L->elem = malloc(MAXSIZE * sizeof(int));
     if (!L->elem) {
         return ERROR;
     }
