@@ -21,7 +21,7 @@ void swap3(int *num1, int *num2) {
     *num1 = *num1 - *num2;
 }
 
-// 注意：*num1 + *num2 的大小不能确定，有可能超出类型范围
+// 注意：*num1 * *num2 的大小不能确定，有可能超出类型范围
 void swap4(int *num1, int *num2) {
     *num1 = *num1 * *num2;
     *num2 = *num1 / *num2;

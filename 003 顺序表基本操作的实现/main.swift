@@ -1,94 +1,100 @@
 import Foundation
 
-struct MyArray<T: Equatable> {
-    private var array: Array<T>
-    private var _length = 0;
+struct List<E: Equatable> {
+    var list: [E?]
+    var _length: Int
     
-    init(_ initialValue: T, count: Int) {
-        array = Array<T>(repeating: initialValue, count: count);
+    init(size: UInt) {
+        list = Array<E?>(repeating: nil, count: Int(size))
+        _length = 0
     }
     
-    func get(at idx: Int) -> (isSuccess: Bool, result: T?) {
-        if idx < 0 || idx >= _length {
-            return (false, nil)
+    mutating func insert(at idx: UInt, value: E) -> Bool {
+        if idx > _length || _length == list.count {
+            return false
+        } else {
+            let range = (Int(idx)..<_length).reversed()
+            for i in range {
+                list[i + 1] = list[i]
+            }
+            list[Int(idx)] = value
+            _length += 1
+            return true
         }
-        return (true, array[idx])
     }
     
-    func index(of value: T) -> Int? {
-        for (idx, e) in array.enumerated() {
-            if e == value {
+    mutating func append(_ value: E) -> Bool {
+        return insert(at: UInt(_length), value: value)
+    }
+    
+    mutating func delete(at idx: UInt) -> Bool {
+        if idx >= _length {
+            return false
+        } else {
+            let range = Int(idx)..<_length - 1
+            for i in range {
+                list[i] = list[i + 1]
+            }
+            _length -= 1
+            return true
+        }
+    }
+    
+    mutating func update(at idx: UInt, value: E) -> Bool {
+        if idx >= _length {
+            return false
+        } else {
+            list[Int(idx)] = value
+            return true
+        }
+    }
+    
+    func getIndex(of value: E) -> Int? {
+        
+        for (idx, val) in list[..<_length].enumerated() {
+            if value == val {
                 return idx
             }
         }
         return nil
     }
     
-    mutating func insert(_ value: T, at idx: Int) -> Bool {
-        if idx < 0 || idx > _length || _length == array.count {
-            return false
-        }
-        
-//        swift 方法
-//        array.insert(value, at: idx)
-        
-        let range = idx..<_length
-        
-        for i in range.reversed() {
-            array[i + 1] = array[i]
-        }
-        
-        array[idx] = value
-        _length += 1
-        
-        return true
-    }
-    
-    mutating func remove(at idx: Int) -> Bool {
-        if idx < 0 || idx >= _length {
-            return false
-        }
-        
-        for i in idx..<_length {
-            array[i] = array[i + 1]
-        }
-        
-        _length -= 1
-        
-        return true
-    }
-    
-    func length() -> Int {
-        return _length
-    }
-    
-    func isEmpty() -> Bool {
-        return _length == 0
-    }
-    
-    func traverse() {
-        for v in array[0..<_length] {
-            print(v)
+    func getValue(of idx: UInt) -> E? {
+        if idx >= _length {
+            return nil
+        } else {
+            return list[Int(idx)]
         }
     }
     
     mutating func clear() {
         _length = 0
     }
+    
+    func traverse() {
+        for v in list[..<_length] {
+            print(v!, terminator: " ")
+        }
+        print()
+    }
 }
 
-var array = MyArray(0, count: 5)
+var list = List<Int>(size: 10)
 
-print(array.get(at: 0))
+for _ in 0..<5 {
+    list.append(Int.random(in: 0..<20))
+}
 
-array.insert(9, at: 0)
-array.insert(4, at: 0)
-array.insert(1, at: 0)
-array.insert(93, at: 0)
-array.insert(23, at: 0)
-array.insert(43, at: 5)
+list.traverse()
 
-array.traverse()
+list.insert(at: 5, value: 30)
+list.traverse()
 
-print(array.index(of: 1))
-print(array.get(at: 4).result)
+list.delete(at: 2)
+list.traverse()
+
+list.update(at: 1, value: 100)
+list.traverse()
+
+print(list.getIndex(of: 100))
+print(list.getValue(of: 3))
