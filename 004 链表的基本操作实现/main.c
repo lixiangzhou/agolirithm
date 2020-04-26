@@ -111,6 +111,10 @@ void getIndex(LinkList *list, int value, int *idx) {
     }
 }
 
+void length(LinkList *list) {
+    return list->value;
+}
+
 void clean(LinkList *list) {
     Node *p = list->next;
     list->next = NULL;

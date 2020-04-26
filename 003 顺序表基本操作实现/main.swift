@@ -67,6 +67,10 @@ struct List<E: Equatable> {
         }
     }
     
+    func length() -> Int {
+        return _length;
+    }
+    
     mutating func clear() {
         _length = 0
     }

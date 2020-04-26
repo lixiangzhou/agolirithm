@@ -7,13 +7,16 @@ typedef struct {
     int size; // 总长度
 } List;
 
-void init(List *list, int size) {
+void * createList(int size) {
     if (size < 1) {
         printf("初始化失败\n，size 不能小于1\n");
+        return NULL;
     } else {
+        List *list = (List *)malloc(sizeof(List));
         list->size = size;
         list->length = 0;
         list->elems = malloc(sizeof(int) * size);
+        return list;
     }
 }
 
@@ -52,22 +55,26 @@ void update(List *list, int idx, int value) {
     }
 }
 
-int getvalue(List list, int idx) {
-    if (idx < 0 || idx >= list.length) {
+int getvalue(List *list, int idx) {
+    if (idx < 0 || idx >= list->length) {
         printf("获取失败\n");
         return -1;
     } else {
-        return list.elems[idx];
+        return list->elems[idx];
     }
 }
 
-int getidx(List list, int value) {
-    for (int i = 0; i < list.length; i++) {
-        if (list.elems[i] == value) {
+int getidx(List *list, int value) {
+    for (int i = 0; i < list->length; i++) {
+        if (list->elems[i] == value) {
             return i;
         }
     }
     return -1;
+}
+
+int length(List *list) {
+    return list->length;
 }
 
 void clean(List *list) {
@@ -76,45 +83,43 @@ void clean(List *list) {
 
 void destroy(List *list) {
     free(list->elems);
+    free(list);
 }
 
-void traverse(List list) {
-    for (int i = 0; i < list.length; i++) {
-        printf("%d ", list.elems[i]);
+void traverse(List *list) {
+    for (int i = 0; i < list->length; i++) {
+        printf("%d ", list->elems[i]);
     }
     printf("\n");
 }
 
 
 int main() {
-    List list;
-    init(&list, 10);
+    List *list = createList( 10);
     
-//    insert(&list, 0, 23);
-    append(&list, 12);
-    append(&list, 14);
-    append(&list, 15);
-    append(&list, 17);
-    append(&list, 19);
-    append(&list, 30);
-    insert(&list, 2, 90);
-    append(&list, 10);
-    append(&list, 40);
-    append(&list, 50);
-    
-    traverse(list);
-    
-    delete(&list, 0);
+//    insert(list, 0, 23);
+    append(list, 12);
+    append(list, 14);
+    append(list, 15);
+    append(list, 17);
+    append(list, 19);
+    append(list, 30);
+    insert(list, 2, 90);
+    append(list, 10);
+    append(list, 40);
+    append(list, 50);
     
     traverse(list);
     
-    destroy(&list);
+    delete(list, 0);
+    
+    traverse(list);
     
     printf("%d \n", getvalue(list, 8));
     
     printf("%d \n", getidx(list, 40));
     
-    update(&list, 3, 111);
+    update(list, 3, 111);
     
     traverse(list);
 }
