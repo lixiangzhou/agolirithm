@@ -7,7 +7,7 @@ class LinkList<T: Equatable> {
     }
 
     private let header = Node<T>()
-    private var length = 0
+    private(set) var length = 0
     
     func insert(_ value: T, at idx: UInt) {
         var p: Node<T>? = header

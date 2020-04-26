@@ -11,7 +11,7 @@ class Node<T: Equatable>: Equatable {
 
 class LinkList<T: Equatable> {
     private let header = Node<T>()
-    private var length = 0
+    private(set) var length = 0
     
     init() {
         header.next = header
