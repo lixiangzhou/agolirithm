@@ -55,7 +55,7 @@ void update(List *list, int idx, int value) {
     }
 }
 
-int getvalue(List *list, int idx) {
+int getValue(List *list, int idx) {
     if (idx < 0 || idx >= list->length) {
         printf("获取失败\n");
         return -1;
@@ -115,7 +115,7 @@ int main() {
     
     traverse(list);
     
-    printf("%d \n", getvalue(list, 8));
+    printf("%d \n", getValue(list, 8));
     
     printf("%d \n", getidx(list, 40));
     
