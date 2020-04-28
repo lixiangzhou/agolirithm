@@ -89,9 +89,57 @@ func printList(_ header: Node) {
 }
 
 
-/// 第一题和第二题
-func test1_2() {
-    let isFirst = true
+/// 第一题
+func test1() {
+    func merge(_ listA: Node, _ listB: Node) -> Node {
+        let header = Node()
+        
+        var pA = listA.next
+        var pB = listB.next
+        
+        var p: Node? = header
+        
+        var lastValue: Int? = nil
+        while pA != nil && pB != nil {
+            let vA = pA!.value
+            let vB = pB!.value
+            
+            if vA < vB {
+                p?.next = pA
+                pA = pA?.next
+            } else if vA == vB {
+                p?.next = pA
+                pA = pA?.next
+                pB = pB?.next
+            } else {
+                p?.next = pB
+                pB = pB?.next
+            }
+            if lastValue == p?.next?.value {
+                p?.next = nil
+            } else {
+                p = p?.next
+                lastValue = p?.value
+            }
+        }
+        p?.next = pA ?? pB
+        return header
+    }
+    
+    // 创建两个有序列表
+    let list1 = createList(10)
+    let list2 = createList(10)
+    
+    printList(list1)
+    printList(list2)
+    
+    let result = merge(list1, list2)
+    printList(result)
+}
+//test1()
+
+/// 第二题
+func test2() {
     func merge(_ listA: Node, _ listB: Node) -> Node {
         let header = Node()
         
@@ -104,27 +152,12 @@ func test1_2() {
             let vA = pA!.value
             let vB = pB!.value
             
-            // 第一题和第二题的差异在这里
-            if isFirst { // 第一题
-                if vA < vB {
-                    p?.next = pA
-                    pA = pA?.next
-                } else if vA == vB {
-                    p?.next = pA
-                    pA = pA?.next
-                    pB = pB?.next
-                } else {
-                    p?.next = pB
-                    pB = pB?.next
-                }
-            } else { // 第二题
-                if vA < vB {
-                    p?.next = pA
-                    pA = pA?.next
-                } else {
-                    p?.next = pB
-                    pB = pB?.next
-                }
+            if vA < vB {
+                p?.next = pA
+                pA = pA?.next
+            } else {
+                p?.next = pB
+                pB = pB?.next
             }
             p = p?.next
         }
@@ -142,36 +175,39 @@ func test1_2() {
     let result = merge(list1, list2)
     printList(result)
 }
-//test1_2()
-
+//test2()
 
 /// 第三题
 func test3() {
-    func intersection(_ listA: Node, _ listB: Node) -> Node {
-        let header = Node()
+    func intersection(_ listA: Node, _ listB: Node) {
+        var pA: Node? = listA
+        var pB: Node? = listB
         
-        var pA = listA.next
-        var pB = listB.next
-        var p: Node? = header
+        var nA = pA?.next
+        var nB = pB?.next
         
-        while pA != nil && pB != nil {
-            let vA = pA!.value
-            let vB = pB!.value
+        var lastValue: Int? = nil
+        while nA != nil && nB != nil {
+            let vA = nA!.value
+            let vB = nB!.value
             
             if vA < vB {
-                pA = pA?.next
+                pA?.next = nA?.next
+                nA = pA?.next
             } else if vA == vB {
-                p?.next = pA
-                pA = pA?.next
-                pB = pB?.next
-                
-                p = p?.next
+                if lastValue != vA {
+                    pA = nA
+                    nA = pA?.next
+                    lastValue = vA
+                }
+                pB = nB
+                nB = pB?.next
             } else {
-                pB = pB?.next
+                pB = nB
+                nB = pB?.next
             }
         }
-        p?.next = nil
-        return header
+        pA?.next = nil
     }
     
     // 创建两个有序列表
@@ -181,8 +217,8 @@ func test3() {
     printList(list1)
     printList(list2)
     
-    let result = intersection(list1, list2)
-    printList(result)
+    intersection(list1, list2)
+    printList(list1)
 }
 //test3()
 
@@ -196,19 +232,27 @@ func test4() {
         var p: Node? = header
         
         var count = 0
+        var repeatValue: Int? = nil
+        var lastValue: Int? = nil
         while pA != nil && pB != nil {
             let vA = pA!.value
             let vB = pB!.value
             
             if vA < vB {
-                p?.next = pA
-                pA = pA?.next
-                
-                p = p?.next
-                count += 1
+                if vA == repeatValue || lastValue == vA {
+                    pA = pA?.next
+                } else {
+                    p?.next = pA
+                    pA = pA?.next
+                    
+                    p = p?.next
+                    count += 1
+                    lastValue = vA
+                }
             } else if vA == vB {
                 pA = pA?.next
                 pB = pB?.next
+                repeatValue = vA
             } else {
                 pB = pB?.next
             }
@@ -249,15 +293,13 @@ func test5() {
             let value = p!.value
             if value < 0 {
                 pA?.next = p
-                p = p?.next
                 pA = pA?.next
             } else if value == 0 {
-                p = p?.next
             } else {
                 pB?.next = p
-                p = p?.next
                 pB = pB?.next
             }
+            p = p?.next
         }
         pA?.next = nil
         pB?.next = nil
@@ -272,7 +314,7 @@ func test5() {
     printList(list1)
     printList(list2)
 }
-//test5()
+test5()
 
 /// 第六题
 func test6() {
@@ -367,7 +409,6 @@ func test10() {
             }
         }
         
-        
         list.removeLast(find)
     }
     
@@ -386,4 +427,4 @@ func test10() {
     }
     print()
 }
-test10()
+//test10()
