@@ -45,9 +45,7 @@ func merge(_ listA: LinkList<Int>, _ listB: LinkList<Int>) -> LinkList<Int> {
         pC = pC?.next
     }
     
-    if let pB = pB {
-        pC?.next = pB
-    }
+    pC.next = pA ?? pB
     
     return listC
 }
