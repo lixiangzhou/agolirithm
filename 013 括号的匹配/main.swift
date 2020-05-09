@@ -11,16 +11,8 @@ struct Stack<E> {
         self.top = 0
     }
     
-    mutating func clear() {
-        top = 0
-    }
-    
     func isEmpty() -> Bool {
         return top == 0
-    }
-    
-    func length() -> Int {
-        return top
     }
     
     func getTop() -> E? {
@@ -43,13 +35,6 @@ struct Stack<E> {
             return e
         }
         return nil
-    }
-    
-    func traverse() {
-        for i in 0..<top {
-            print(elems[i]!, terminator: " ")
-        }
-        print()
     }
 }
 
